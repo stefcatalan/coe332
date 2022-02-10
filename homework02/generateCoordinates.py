@@ -1,9 +1,37 @@
 # randomly generate latitude, longitude, compositions for landing sites
 
-# generate 5 random pairs of latitudes in decimal notation
+import numpy as np
+import random
+import json
 
-# randomly choose a meteorite composition from list
+# list of meteorite compositions
+meteorComp = ["stony","iron","stony-iron"]
 
-# assemble data into a dictionary
+# list of sites
+sitesList = []
+
+# randomly generate 5 coordinates
+for x in range(5):
+    lat = np.random.uniform(16.0, 18.0)
+    lon = np.random.uniform(82.0, 84.0)
+    
+    # randomly choose a meteorite comp from the list
+    composition = random.choice(meteorComp)
+
+    # assemble data into a dictionary
+    info = {}
+
+    info["site_id"] = x
+    info["latitude"] = lat
+    info["longitude"] = lon
+    info["composition"] = composition
+
+    sitesList.append(info)
+
+# "sites" dictionary
+sitesDict = {"sites": sitesList}
 
 # save data into a JSON file
+jsonCoordinates = json.dumps(sitesDict, indent = 4)
+print(jsonCoordinates)
+
