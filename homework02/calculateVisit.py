@@ -22,6 +22,8 @@ def main():
     # assume robot visits sites in order of list index
     sitesList = data["sites"]
 
+    totalTravel = 0
+
     # site visit for loop
     for visit in sitesList:
         distance = greatCircle(startingLat, startingLon, visit["latitude"], visit["longitude"])
@@ -37,7 +39,9 @@ def main():
 
         print("leg =", visit["site_id"], ",", "travel time =", timeTravel, ",", "sample time =", timeSample)
 
-    print("total legs =", visit["site_id"], ",", "total time elapsed =", timeTravel)
+        totalTravel += timeTravel
+
+    print("total legs =", visit["site_id"], ",", "total time elapsed =", totalTravel)
 
 
     return
