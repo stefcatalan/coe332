@@ -33,5 +33,7 @@ sitesDict = {"sites": sitesList}
 
 # save data into a JSON file
 jsonCoordinates = json.dumps(sitesDict, indent = 4)
-print(jsonCoordinates)
+
+with open('jsonData.json', 'w') as outfile:
+    outfile.write(jsonCoordinates)
 
