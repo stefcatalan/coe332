@@ -1,15 +1,47 @@
-# reads in the meteorite JSON file & calculates time required to visit sites
+# reads meteorite json file & calculates time of the trip in order
 
-# use json library to read data generated in part 1 & store as dictionary
+import json
+from numpy import sin, cos, arccos, arcsin, sqrt, radians
 
-# assume robot starts at latitude/longitude
+# great circle function
+def greatCircle(lat1, lon1, lat2, lon2):
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
 
-# assume robot visits the sites
+    return 3389.5 * (arccos(sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1 - lon2)))
 
-# assume max robot speed is 10 km/h
+def main():
+   
+    # read data from part 1 and store as dictionary
+    with open('jsonData.json') as jsonFile:
+        data = json.load(jsonFile)
 
-# assume mars is a sphere & use great-circle algorithm
+    # assume robot starts at latitude / longitude
+    startingLat = 16.0
+    startingLon = 82.0
 
-# robot stops to take sample
+    # assume robot visits sites in order of list index
+    sitesList = data["sites"]
 
-# trip is over after sampling the meteorite
+    # site visit for loop
+    for visit in sitesList:
+        distance = greatCircle(startingLat, startingLon, visit["latitude"], visit["longitude"])
+    
+        timeTravel = distance / 10 # robot max speed is 10 km/h
+
+        if visit["composition"] == "stony":
+            timeSample = 1
+        elif visit["composition"] == "iron":
+            timeSample = 2
+        elif visit["composition"] == "stony-iron":
+            timeSample = 3
+
+        print("leg =", visit["site_id"], ",", "travel time =", timeTravel, ",", "sample time =", timeSample)
+
+    print("total legs =", visit["site_id"], ",", "total time elapsed =", timeTravel)
+
+
+    return
+
+if __name__ == '__main__':
+    main()
+
