@@ -2,14 +2,18 @@
 
 import json
 import logging
-#import datetime
-from datetime import datetime
-from datetime import *
-from datetime import timedelta
 import numpy as np
 
 def calculateTurbidity(qualityList: list):
+    """
+    Given a list containing turbidiity data, this function will calculate the turbidity of the water and determine whether it is below a safe threshold through a log message. Returns the average value of turbidity and its water quality from intervals of five dicts in the list.
 
+    Args:
+        qualittyList (list): A list of dictionaries comtaining water quality data.
+
+    Returns:
+        T (float): Average turbidity value from each five dictionaries.
+    """
     currentT = 0
 
     # getting values from the list
@@ -18,13 +22,16 @@ def calculateTurbidity(qualityList: list):
         a0 = qualityList[i]['calibration_constant']
         I90 = qualityList[i]['detector_current']
 
+        # calculating T for each iteration
         currentT += (a0 * I90)
 
-    # calculates turbidity wanted
+    # average T from the five measurments
     T = currentT / 5
     print('Average turbidity from last 5 measurments = ', T, 'NTU')
 
+    # set lower log level
     logging.basicConfig(level = logging.DEBUG)
+
     b = 0    
 
     # if statement determining if the water is safe or not
@@ -33,19 +40,29 @@ def calculateTurbidity(qualityList: list):
         print('Minimum time required to return below safe threshold = 0 hours\n')
     elif(T > 1.0):
         isSafe = logging.warning('Turbidity is above safe threshold')
+        # if it is unsafe, run minTime to calculate time required for T to be < 1.0
         b = minTime(T)
         print('Minimum time required to return below safe threshold =', b, 'hours \n')
 
     return T
 
 def minTime(T: float):
-    T0 = T
-    Ts = 1.0
-    d = 0.02
+    """
+    Derived from a standart exponential decay function, this function calculates the minimum time required for turbidity to return below a safe threshold. Returns the time calulated in hours.
 
+    Args:
+        T (float): The value of turbidity calculated in the previous function.
+
+    Returns:
+        b (float): The amount of time elapsed for the turbidity to return to a safe level.
+    """
+    T0 = T
+    Ts = 1.0 # turbidity threshold for safe water
+    d = 0.02 # decay factor per hour
+
+    # equation to solve for minimum time required for T to be at a safe turbidity
     b = np.log((Ts/T0)) / np.log((1-d))
     return b
-
 
 def main():
     
