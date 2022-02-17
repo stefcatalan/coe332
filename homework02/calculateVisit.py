@@ -4,7 +4,7 @@ import json
 from numpy import sin, cos, arccos, arcsin, sqrt, radians
 
 # great circle function
-def greatCircle(lat1, lon1, lat2, lon2):
+def greatCircle(lat1, lon1, lat2, lon2):   
     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
 
     return 3389.5 * (arccos(sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1 - lon2)))
