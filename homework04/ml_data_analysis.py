@@ -76,6 +76,8 @@ def count_classes(a_list_of_dicts: List[dict], a_key_string: str) -> dict:
 
 
 def main():
+    print('Summary of meteorite data: \n')
+
     logging.debug('entering main loop')
 
     with open('Meteorite_Landings.json', 'r') as f:
@@ -83,11 +85,20 @@ def main():
 
     logging.debug(f'the type of ml_data is {type(ml_data)}')
 
-    print(compute_average_mass(ml_data['meteorite_landings'], 'mass (g)'))
+    print('Average mass of 30 meteors:')
+    print(compute_average_mass(ml_data['meteorite_landings'], 'mass (g)'), 'grams \n')
 
+
+    print('Hemisphere data:')
+#    for row in ml_data['meteorite_landings']:
+ #       print(check_hemisphere(float(row['reclat']), float(row['reclong'])))
     for row in ml_data['meteorite_landings']:
-        print(check_hemisphere(float(row['reclat']), float(row['reclong'])))
+        check_hemisphere(float(row['reclat']), float(row['reclong']))
+        if ['reclat'] == 'Northern' and ['reclong'] == '& Eastern':
+            print('There were ', row, ' meteors found in the Northern & Eastern quadrant')
 
+
+    print('Class data:')
     print(count_classes(ml_data['meteorite_landings'], 'recclass'))
 
 
