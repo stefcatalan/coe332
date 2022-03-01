@@ -85,25 +85,34 @@ def main():
 
     logging.debug(f'the type of ml_data is {type(ml_data)}')
 
-    print('Average mass of 30 meteors:')
+    print('Average mass of', len(ml_data['meteorite_landings']), 'meteors:')
     print(compute_average_mass(ml_data['meteorite_landings'], 'mass (g)'), 'grams \n')
 
-
     print('Hemisphere data:')
-    #for row in ml_data['meteorite_landings']:
-        #if check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Northern & Eastern':
-            # print how many meteors found in this quadrant
-        #elif check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Northern & Western':
-            # print how many meteors found in this quadrant
-        #elif check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Southern & Eastern':
-            # print how many meteors found in this quadrant
-        #elif check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Southern & Western':
-            # print how many meteors found in this quadrant
 
+    northeast = 0
+    northwest = 0
+    southeast = 0
+    southwest = 0
+
+    for row in ml_data['meteorite_landings']:
+        if check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Northern & Eastern':
+            northeast += 1
+        elif check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Northern & Western':
+            northwest += 1
+        elif check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Southern & Eastern':
+            southeast += 1
+        elif check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Southern & Western':
+            southwest += 1
+    print('There were', northeast, 'meteors found in the Northern & Eastern quadrant')
+    print('There were', northwest, 'meteors found in the Northern & Western quadrant')
+    print('There were', southeast, 'meteors found in the Southern & Eastern quadrant')
+    print('There were', southwest, 'meteors found in the Southern & Western quadrant \n')
 
     print('Class data:')
-    print(count_classes(ml_data['meteorite_landings'], 'recclass'))
-
+    keys = list(count_classes(ml_data['meteorite_landings'], 'recclass'))
+    for key in keys:
+        print('The', key,'class was found', count_classes(ml_data['meteorite_landings'], 'recclass')[key], 'times')
 
 
 
