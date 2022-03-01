@@ -90,16 +90,21 @@ def main():
 
 
     print('Hemisphere data:')
-#    for row in ml_data['meteorite_landings']:
- #       print(check_hemisphere(float(row['reclat']), float(row['reclong'])))
-    for row in ml_data['meteorite_landings']:
-        check_hemisphere(float(row['reclat']), float(row['reclong']))
-        if ['reclat'] == 'Northern' and ['reclong'] == '& Eastern':
-            print('There were ', row, ' meteors found in the Northern & Eastern quadrant')
+    #for row in ml_data['meteorite_landings']:
+        #if check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Northern & Eastern':
+            # print how many meteors found in this quadrant
+        #elif check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Northern & Western':
+            # print how many meteors found in this quadrant
+        #elif check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Southern & Eastern':
+            # print how many meteors found in this quadrant
+        #elif check_hemisphere(float(row['reclat']), float(row['reclong'])) == 'Southern & Western':
+            # print how many meteors found in this quadrant
 
 
     print('Class data:')
     print(count_classes(ml_data['meteorite_landings'], 'recclass'))
+
+
 
 
 if __name__ == '__main__':
