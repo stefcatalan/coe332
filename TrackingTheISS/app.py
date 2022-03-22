@@ -1,48 +1,60 @@
 from flask import Flask, jsonify
 import xmltodict
 import json
+import logging
 
 app = Flask(__name__)
+
+logging.basicConfig(level = logging.DEBUG)
 
 @app.route('/reset', methods=['POST'])
 def getData():
     """
-    This route loads the positional and sighting data from the XML files into JSON files that contain a dictionary of the data.
+    This route loads the positional and sighting data from the XML files into global variables that contain a list of dictionaries of data.
 
     Returns:
         A message declaring the process was successful.
     """
+    try:
+        # making the dictionaries able to be scoped globally
+        global positionData
+        global sightingData
 
-    # making the dictionaries able to be scoped globally
-    global positionData
-    global sightingData
+        # opening the xml file for positional data
+        with open("ISS.OEM_J2K_EPH.xml", "r") as xmlfile:
 
-    # opening the xml file for positional data
-    with open("ISS.OEM_J2K_EPH.xml", "r") as xmlfile:
+            # converting xml data as dictionary
+            positionData = xmltodict.parse(xmlfile.read())
+            xmlfile.close()
 
-        # converting xml data as dictionary
-        positionData = xmltodict.parse(xmlfile.read())
-        xmlfile.close()
+            # converting data into json file
+            positionData = positionData['ndm']['oem']['body']['segment']['data']['stateVector']
+            with open("positionData.json", "w") as jsonfile:
+            #    jsonfile.write(positionData)
+                json.dump(positionData, jsonfile)
+                jsonfile.close()
 
-        # converting data into json file
-        positionData = positionData['ndm']['oem']['body']['segment']['data']['stateVector']
-        with open("positionData.json", "w") as jsonfile:
-        #    jsonfile.write(positionData)
-            json.dump(positionData, jsonfile)
-            jsonfile.close()
+    except FileNotFoundError as e:
+        logging.error(e)
+        return 'The file was not found\n'
 
-    # opening the xml file for sighting data
-    with open("XMLsightingData_citiesUSA01.xml", "r") as xmlfile:
+    try:
+        # opening the xml file for sighting data
+        with open("XMLsightingData_citiesUSA01.xml", "r") as xmlfile:
 
-        # converting xml data as dictionary
-        sightingData = xmltodict.parse(xmlfile.read())
-        xmlfile.close()
+            # converting xml data as dictionary
+            sightingData = xmltodict.parse(xmlfile.read())
+            xmlfile.close()
 
-        # converting data into json file
-        sightingData = sightingData['visible_passes']['visible_pass']
-        with open("sightingData.json", "w") as jsonfile:
-            json.dump(sightingData, jsonfile)
-            jsonfile.close()
+            # converting data into json file
+            sightingData = sightingData['visible_passes']['visible_pass']
+            with open("sightingData.json", "w") as jsonfile:
+                json.dump(sightingData, jsonfile)
+                jsonfile.close()
+
+    except FileNotFoundError as e:
+        logging.error(e)
+        return 'The file was not found\n'
 
     return f'Data has successfully been read from files!\n'
 
