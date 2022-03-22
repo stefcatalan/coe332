@@ -1,14 +1,13 @@
 from flask import Flask, jsonify
-import requests
 import xmltodict
 import json
 
 app = Flask(__name__)
 
-@app.route('/data', methods=['POST'])
+@app.route('/reset', methods=['POST'])
 def getData():
     """
-    This function loads the positional and sighting data from the XML files into JSON files that contain a dictionary of the data.
+    This route loads the positional and sighting data from the XML files into JSON files that contain a dictionary of the data.
 
     Returns:
         A message declaring the process was successful.
@@ -45,12 +44,12 @@ def getData():
             json.dump(sightingData, jsonfile)
             jsonfile.close()
 
-    return f'data has successfully been read from files\n'
+    return f'Data has successfully been read from files!\n'
 
 @app.route('/epochs', methods=['GET'])
 def epochs():
     """
-    This function gathers all information of epochs from the positional data.
+    This route gathers all epochs from the positional data.
     
     Returns:
         A list of epochs.
@@ -72,13 +71,13 @@ def epochs():
 @app.route('/epochs/<epoch>', methods=['GET'])
 def specificEpoch(epoch: str):
     """
-    Reads in a user input and finds the information on the specific epoch requested.
+    This route reads in a user input and finds the information on the specific epoch requested.
     
     Args:
         A specified epoch (str value).
 
     Returns:
-        A dictionary with the imformation of the requested epoch.
+        A list of dictionaries with the imformation of the requested epoch.
     """
     data = epochs()
 
@@ -95,7 +94,7 @@ def specificEpoch(epoch: str):
 @app.route('/countries', methods=['GET'])
 def countries():
     """
-    This function gathers all information on countries from the sighting data.
+    This route gathers all countries from the sighting data.
     
     Returns:
         A list of all countries.
@@ -117,7 +116,7 @@ def countries():
 @app.route('/countries/<country>', methods=['GET'])
 def specificCountry(country: str):
     """
-    Reads in a user input and finds the information on the specific country requested.
+    This route reads in a user input and finds the information on the specific country requested.
 
     Args:
         A specified country (str value).
@@ -141,7 +140,13 @@ def specificCountry(country: str):
 @app.route('/countries/<country>/regions', methods=['GET'])
 def regions(country: str):
     """
+    This route gathers all regions within the given country.
+    
+    Args:
+        The specified country queried from the previous route. (str value)
 
+    Returns:
+        A list of the regions.
     """
     data = specificCountry(country)
     global regionsList
@@ -157,7 +162,14 @@ def regions(country: str):
 @app.route('/countries/<country>/regions/<region>', methods=['GET'])
 def specificRegion(country: str, region: str):
     """
+    This route reads in a user input and finds the information on the specific region requested.
 
+    Args:
+        The specified country queried from a previous route (str value).
+        A specified region (str values).
+
+    Reutrns:
+        A list of dictionaries with information on the specified region.
     """
     data = regions(country)
     global requestedRegion
@@ -173,7 +185,14 @@ def specificRegion(country: str, region: str):
 @app.route('/countries/<country>/regions/<region>/cities', methods=['GET'])
 def cities(country: str, region: str):
     """
+    This route gathers all cities within the given region.
 
+    Args:
+        The specified country queried from a previous route (str value).
+        The specified region queried from the previous route (str value).
+
+    Returns:
+        A list of the cities.
     """
     data = specificRegion(country, region)
     global citiesList
@@ -189,7 +208,15 @@ def cities(country: str, region: str):
 @app.route('/countries/<country>/regions/<region>/cities/<city>', methods=['GET'])
 def specificCity(country: str, region: str, city: str):
     """
+    This route reads in a user input and finds the information on the specific city requested.
 
+    Args:
+        The specified country queried from a previous route (str value).
+        The specified region queried from a previous route (str value).
+        A specified city (str value).
+    
+    Returns:
+        A list of dictionaries with information on the specified region.
     """
     data = cities(country, region)
     
