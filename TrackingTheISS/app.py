@@ -7,6 +7,41 @@ app = Flask(__name__)
 
 logging.basicConfig(level = logging.DEBUG)
 
+@app.route('/', methods=['GET'])
+def info():
+    """
+    This route gives information on how to interact with the application.
+    
+    Returns:
+        A message of the information needed to execute the routes.
+    """
+    message = """
+    *** Tracking the ISS ***    
+    
+    Routes on information and management:
+
+    /                                                       (GET) prints info on each route available
+    /reset                                                  (POST) resets and loads data from files
+
+    Routes for querying positional data:
+
+    /epochs                                                 (GET) a list of all epochs in the data
+    /epochs/<epoch>                                         (GET) all data of a specific <epoch>
+
+    Routes for querying sighting data:
+    
+    /countries                                              (GET) a list of all countries in the data
+    /countries/<country>                                    (GET) all data on the requested <country>
+    /countries/<country>/regions                            (GET) a list of all regions in the given country
+    /countries/<country>/regions/<region>                   (GET) all data on the requested <region>
+    /countries/<country>/regions/<region>/cities            (GET) a list of all cities in the given region
+    /countries/<country>/regions/<region>/cities/<city>     (GET) all data on the requested <city>
+
+    """
+    return message
+
+
+
 @app.route('/reset', methods=['POST'])
 def getData():
     """
@@ -36,7 +71,7 @@ def getData():
 
     except FileNotFoundError as e:
         logging.error(e)
-        return 'The file was not found\n'
+        return 'The file does not exist\n'
 
     try:
         # opening the xml file for sighting data
@@ -54,7 +89,7 @@ def getData():
 
     except FileNotFoundError as e:
         logging.error(e)
-        return 'The file was not found\n'
+        return 'The file does not exist\n'
 
     return f'Data has successfully been read from files!\n'
 
@@ -94,12 +129,19 @@ def specificEpoch(epoch: str):
     data = epochs()
 
     requestedEpochList = []
+    logging.debug('Have a specific epoch queried')
+
     # iterating through the length of the list
     for i in range(len(epochList)):
 
-        # finding dictionaries with the key requested
-        if epoch in epochList[i]:
-            requestedEpochList.append(positionData[i])
+        try:
+            # finding dictionaries with the key requested
+            if epoch in epochList[i]:
+                requestedEpochList.append(positionData[i])
+            
+        except KeyError as e:
+            logging.error(e)
+            return 'Requested epoch was not found\n'
 
     return jsonify(requestedEpochList)
 
@@ -140,11 +182,18 @@ def specificCountry(country: str):
     global requestedCountryList    
 
     requestedCountryList = []
+    logging.debug('Have a specific country queried')
+
     for i in range(len(countryList)):
 
-        #finding dictionaries with the key requested
-        if country in countryList[i]:
-            requestedCountryList.append(sightingData[i])
+        try:
+            #finding dictionaries with the key requested
+            if country in countryList[i]:
+                requestedCountryList.append(sightingData[i])
+
+        except KeyError as e:
+            logging.error(e)
+            return 'Requested country was not found\n'
 
     return jsonify(requestedCountryList)
 
@@ -187,9 +236,17 @@ def specificRegion(country: str, region: str):
     global requestedRegion
 
     requestedRegion = []
+    logging.debug('Have a specific region queried')
+
     for i in range(len(regionsList)):
-        if region in regionsList[i]:
-            requestedRegion.append(requestedCountryList[i])
+
+        try:
+            if region in regionsList[i]:
+                requestedRegion.append(requestedCountryList[i])
+
+        except KeyError as e:
+            logging.error(e)
+            return 'Requested region was not found\n'
 
     return jsonify(requestedRegion)
 
@@ -233,9 +290,17 @@ def specificCity(country: str, region: str, city: str):
     data = cities(country, region)
     
     requestedCity = []
+    logging.debug('Have a specific city queried')
+
     for i in range(len(citiesList)):
-        if city in citiesList[i]:
-            requestedCity.append(requestedRegion[i])
+
+        try:
+            if city in citiesList[i]:
+                requestedCity.append(requestedRegion[i])
+
+        except KeyError as e:
+            logging.error(e)
+            return 'Requested city was not found\n'
 
     return jsonify(requestedCity)
 
