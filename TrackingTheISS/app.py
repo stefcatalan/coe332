@@ -139,7 +139,7 @@ def specificEpoch(epoch: str):
             if epoch in epochList[i]:
                 requestedEpochList.append(positionData[i])
             
-        except KeyError as e:
+        except NameError as e:
             logging.error(e)
             return 'Requested epoch was not found\n'
 
@@ -191,7 +191,7 @@ def specificCountry(country: str):
             if country in countryList[i]:
                 requestedCountryList.append(sightingData[i])
 
-        except KeyError as e:
+        except NameError as e:
             logging.error(e)
             return 'Requested country was not found\n'
 
@@ -244,7 +244,7 @@ def specificRegion(country: str, region: str):
             if region in regionsList[i]:
                 requestedRegion.append(requestedCountryList[i])
 
-        except KeyError as e:
+        except NameError as e:
             logging.error(e)
             return 'Requested region was not found\n'
 
@@ -298,7 +298,7 @@ def specificCity(country: str, region: str, city: str):
             if city in citiesList[i]:
                 requestedCity.append(requestedRegion[i])
 
-        except KeyError as e:
+        except NameError as e:
             logging.error(e)
             return 'Requested city was not found\n'
 
