@@ -1,6 +1,6 @@
 NAME ?= stefcatalan
 
-all: build run push
+all: build run
 
  images:
 	docker images | grep ${NAME}
@@ -13,7 +13,3 @@ all: build run push
 
  run:
 	docker run --name "iss-tracker" -d -p 5006:5000 ${NAME}/midterm:1.0
-
- push:
-	docker push ${NAME}/midterm:1.0
-
