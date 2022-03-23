@@ -12,7 +12,7 @@ The `test_app.py` script performs a series of pytests for when routes are querie
 
 ### Makefile
 
-The `Makefile` contains targets to build and run the containerized Flask application. In the repository, the command `make all` executes both targets. `make build` only builds the image, and `make run` runs the applicaion.
+The `Makefile` contains targets to build and run the containerized Flask application. In the repository, the command `make all` executes both targets. `make build` builds the image, and `make run` runs the applicaion. After completing these commands, the user can now interact with the Flask application.
 
 ### Dockerfile
 
@@ -39,7 +39,7 @@ Execute the following command to build your image:
 [isp02]$ docker build -t <username>/<image_name>:<tag> .
 ```
 
-The command to pull a pre-containerized copy of the Flask application I have made is as follows:
+The command to pull a pre-containerized copy of the Flask application I have made as follows:
 ```ruby
 [isp02]$ docker pull stefcatalan/midterm:1.0
 ```
@@ -65,7 +65,7 @@ The expected outputs are either a list of the queried input,
   "2022-057T12:00:00.000Z"
 ]
 ```
-or a list of dictionaries of a queried key
+or a list of dictionaries of a queried key.
 ```ruby
     "sighting_date": "Thu Feb 24/05:01 AM", 
     "spacecraft": "ISS", 
@@ -86,7 +86,7 @@ or a list of dictionaries of a queried key
 
 ## Cleaning Up
 
-After the user is finished analyzing the Flask application, it is necessary to sop and remove the container.
+After the user is finished analyzing the Flask application, it is necessary to stop and remove the container.
 ```ruby
 [isp02]$ docker ps -a | grep stefcatalan
 aba38304ee2     stefcatalan/midterm:1.0       ...
