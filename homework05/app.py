@@ -1,7 +1,6 @@
 import redis
 import json
-import requests
-from flask import Flask
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -17,8 +16,16 @@ def loadRedis():
 
 @app.route('/read', methods=['GET'])
 def readData():
-    file = requests.get(url = "https://raw.githubusercontent.com/wjallen/coe332-sample-data/main/ML_Data_Sample.json")
-    return file.json()
+
+    g = getData()
+    start = request.args.get('start', 0)
+    try:
+        start = int(start)
+    except ValueError:
+        return 'invalid start input value'
+    start = int(start)
+
+    return jsonify(g[start:])
 
 
 if __name__ == "__main__":
