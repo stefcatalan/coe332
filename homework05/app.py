@@ -1,5 +1,6 @@
 import redis
 import json
+#import requests
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -12,11 +13,13 @@ def getData():
 # generating the redis client object
 def loadRedis():
     
-    return redis.Redis(host = '172.17.0.3', port = 6379, db = 0)
+    rd = redis.Redis(host = '172.17.0.3', port = 6379, db = 0)
+    for f in data:
+        rd.set(d['id'], mapping = d)
 
 @app.route('/read', methods=['GET'])
 def readData():
-
+    """
     g = getData()
     start = request.args.get('start', 0)
     try:
@@ -26,9 +29,15 @@ def readData():
     start = int(start)
 
     return jsonify(g[start:])
+    """
+    return getData()
 
+@app.route('/load', methods=['POST'])
+def loadData():
+
+    
 
 if __name__ == "__main__":
+    app.run(debug = True, host = '0.0.0.0')
     d = getData()
     loadRedis(d['meteorite_landings'])
-    app.run(debug = True, host = '0.0.0.0')
