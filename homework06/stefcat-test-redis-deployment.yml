@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stefcat-test-deployment
+  labels:
+    username: stefcat
+    env: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stefcat-test-redis
+  template:
+    metadata:
+      labels:
+        username: stefcat
+        env: test
+        app: stefcat-test-redis
+    spec:
+      containers:
+        - name: redisdep
+          image: redis:6
+          volumeMounts:
+          - name: stefcat-test-pvc
+            mountPath: "/data"
+      volumes:
+      - name: stefcat-test-pvc
+        persistentVolumeClaim:
+          claimName: stefcat-test-pvc
+
