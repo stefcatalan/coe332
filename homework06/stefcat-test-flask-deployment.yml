@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stefcat-test-flask-dep
+  labels:
+    username: stefcat
+    env: test
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stefcat-test-flask
+  template:
+    metadata:
+      labels:
+        username: stefcat
+        env: test
+        app: stefcat-test-flask
+    spec:
+      containers:
+        - name: flaskdep
+          imagePullPolicy: Always
+          image: stefcatalan/redisflask:hw05
+          env:
+          - name: FLASK_APP
+            value: "app.py"
+          ports:
+          - name: http
+            containerPort: 5000
+
