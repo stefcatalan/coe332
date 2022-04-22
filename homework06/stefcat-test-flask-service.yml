@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stefcat-test-flask-ser
+  labels:
+    username: stefcat
+    env: test
+spec:
+  type: ClusterIP
+  selector:
+    app: stefcat-test-flask
+  ports:
+  - name: stefcat-test-flask
+    port: 5000
+    targetPort: 5000
+
