@@ -18,13 +18,32 @@ Services in k8s exposes the Flask API to different components in Kubernetes and 
 
 ### A Debug Deployment
 
-In order to use the Flask API, the user must operate in a container on the k8s network. The `python debug deployment` 
+In order to use the Flask API, the user must operate in a container on the k8s network. The `python debug deployment` allows the user to access the Flask server after launching a shell inside the container: 
 
-(describe and explain how to use it):
-1. kubectl get services
-    get flask service IP
-2. kubectl get pods
-    get pod id of python debug deployment
-3. kubectl exec -it '< python debug dep id >'
-4. curl '< flask service IP >':5000/route  
+First, the user must get the `Flask service` IP address by doing the following:
+```
+[stefcat@kube-2 hw06]$ kubectl get services
+NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+stefcat-test-flask-ser   ClusterIP   10.97.99.157     <none>        5000/TCP   3d
+```
+The user must also get the name of the `python debug deployment` pod:
+```
+[stefcat@kube-2 hw06]$ kubectl get pods
+NAME                                       READY   STATUS    RESTARTS   AGE
+py-debug-deployment-5dfcf7bdd9-qjbch       1/1     Running   0          3d15h
+```
+To launch the debug shell inside the container, `exec` into the gathered pod:
+```
+[stefcat@kube-2 hw06]$ kubectl exec -it py-debug-deployment-5dfcf7bdd9-qjbch -- /bin/bash
+```
+Now, the user can access the Flask API!
+```
+root@py-debug-deployment-5dfcf7bdd9-qjbch:/# curl <flask service IP>:5000/<route>
+{
+      "GeoLocation": "(-60.7340, 54.3187)", 
+      "id": "10297", 
+      "mass (g)": "8670", 
+      "name": "Thomas", 
+       ...
+```
 
