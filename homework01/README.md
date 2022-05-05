@@ -1,4 +1,4 @@
-# homework 01 description
+# Working with Python
 
 ## list generator
 this script generates a list of integers and determines if they are odd or even numbers
