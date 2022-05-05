@@ -1,4 +1,4 @@
-# Return of the JSON
+# Investigating Meteorite Landing Sites
 
 Homework 02 consists the operation of a robotic vehicle on Mars that investigates five meteorite landing sites in Syrtis Major. We are simulating this mission in two parts, while also implementing aspects of JSON to further improve on our skills using the JSON library.
 
